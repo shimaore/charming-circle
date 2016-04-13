@@ -65,7 +65,7 @@ The design document for the shared provisioning database.
 
     src_ddoc =
       _id: "_design/#{id}"
-      language: 'coffeescript'
+      language: 'javascript'
 
       lib:
         deepEqual: read 'lib/deepEqual.js'
