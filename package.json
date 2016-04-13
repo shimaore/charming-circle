@@ -11,6 +11,7 @@
   "author": "Stéphane Alnet <stephane@shimaore.net> (http://stephane.shimaore.net/)",
   "license": "Unlicense",
   "dependencies": {
+    "coffeescript-helpers": "^2.2.0",
     "pouchdb": "^5.3.1",
     "superagent": "^1.8.3",
     "superagent-as-promised": "^4.0.0"
