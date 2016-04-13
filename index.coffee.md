@@ -25,16 +25,12 @@ So:
     request = (require 'superagent-as-promised') require 'superagent'
     seem = require 'seem'
     PouchDB = require 'pouchdb'
+    {p_fun} = require 'coffeescript-helpers'
 
     set_voicemail_security = require './set-voicemail-security'
 
     seconds = 1000
     minutes = 60*seconds
-
-    read = do ->
-      fs = require 'fs'
-      path = require 'path'
-      (file) -> fs.readFileSync path.join(__dirname,file), 'utf8'
 
     update = seem (db,doc) ->
       {_rev} = yield db
@@ -49,17 +45,20 @@ So:
 
 The design document for the user's provisioning database.
 
+    deepEqual = require './lib/deepEqual'
+    replicated_ids = require './lib/replicated_ids'
+
     ddoc =
       _id: "_design/#{id}"
       language: 'javascript'
 
-      validate_doc_update: read 'validate_user_doc.js'
+      validate_doc_update: p_fun require './validate_user_doc'
 
       lib:
-        deepEqual: read 'lib/deepEqual.js'
-        replicated_ids: read 'lib/replicated_ids.js'
+        deepEqual: p_fun deepEqual
+        replicated_ids: p_fun replicated_ids
       filters:
-        to_provisioning: read 'filter-to-provisioning.js'
+        to_provisioning: p_fun require './filter-to-provisioning'
 
 The design document for the shared provisioning database.
 
@@ -68,10 +67,10 @@ The design document for the shared provisioning database.
       language: 'javascript'
 
       lib:
-        deepEqual: read 'lib/deepEqual.js'
-        replicated_ids: read 'lib/replicated_ids.js'
+        deepEqual: p_fun deepEqual
+        replicated_ids: p_fun replicated_ids
       filters:
-        from_provisioning: read 'filter-from-provisioning.js'
+        from_provisioning: p_fun require './filter-from-provisioning'
 
     @include = ->
 

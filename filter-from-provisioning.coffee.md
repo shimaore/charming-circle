@@ -1,5 +1,5 @@
-    replicated_ids = require 'lib/replicated_ids'
-    return (doc, {roles}) ->
+    module.exports = (doc, {roles}) ->
+      replicated_ids = require 'lib/replicated_ids'
       may = (role) -> role in roles
 
       # Do not replicate if the document is flagged for no user replication.

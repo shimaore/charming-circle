@@ -20,9 +20,13 @@
         f.should.be.a 'RegExp'
 
     describe 'Loading', ->
+      {p_fun} = require 'coffeescript-helpers'
       read = (file) -> (require 'fs').readFileSync file, 'utf8'
       cc = (m) ->
-        eval m.replace /// 'lib/([^']+)' ///, "'../lib/$1.js'"
+        req = "(function (module) { return #{p_fun m}\n})".replace /// 'lib/([^']+)' ///, "'../lib/$1'"
+        mo = exports:{}
+        (eval req) mo
+        mo.exports
       it 'filter-from-provisioning', ->
         f = cc read './filter-from-provisioning.js'
         f.should.be.a 'function'

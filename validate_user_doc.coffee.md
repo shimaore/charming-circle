@@ -1,75 +1,75 @@
-    # validate_user_doc.coffee
-    deepEqual = require 'lib/deepEqual'
+    module.exports = (newDoc, oldDoc, userCtx, secObj) ->
 
-    digits = (v) -> typeof v is 'string' and v.match /^\d+$/
-    boolean = (v) -> v is true or v is false
-    optional_digits = (v) -> not v? or digits v
-    array = (v) -> typeof v is 'object' and v?.length?
-    timezone = (v) -> typeof v is 'string'
-    language = (v) -> typeof v is 'string'
+      # validate_user_doc.coffee
+      deepEqual = require 'lib/deepEqual'
 
-    do ->
-      assert = (t,m) ->
-        if not t
-          throw error: m ? 'assertion failed'
-      assert ( digits '12345'             ) , 'digits'
-      assert ( not digits '123f5'         ) , 'not digits'
-      assert ( not digits null            ) , 'not digits'
-      assert ( boolean true               ) , 'boolean'
-      assert ( boolean false              ) , 'boolean'
-      assert ( not boolean 3              ) , 'not boolean'
-      assert ( not boolean null           ) , 'not boolean'
-      assert ( optional_digits null       ) , 'optional digits'
-      assert ( optional_digits '42'       ) , 'optional digits'
-      assert ( not optional_digits true   ) , 'not optional digits'
-      assert ( array []                   ) , 'array'
-      assert ( array [12,34,56]           ) , 'array'
-      assert ( not array true             ) , 'not array'
-      assert ( not array null             ) , 'not array'
-      assert ( not array {}               ) , 'not array'
-      assert ( not array 'foo'            ) , 'not array'
-      assert ( timezone 'UTC'             ) , 'timezone'
-      assert ( timezone 'Europe/Paris'    ) , 'timezone'
-      assert ( not timezone null          ) , 'not timezone'
-      assert ( language 'fr'              ) , 'language'
-      assert ( language 'en'              ) , 'language'
-      assert ( not language null          ) , 'not language'
+      digits = (v) -> typeof v is 'string' and v.match /^\d+$/
+      boolean = (v) -> v is true or v is false
+      optional_digits = (v) -> not v? or digits v
+      array = (v) -> typeof v is 'object' and v?.length?
+      timezone = (v) -> typeof v is 'string'
+      language = (v) -> typeof v is 'string'
 
-    Validate =
-      local_number:
-        cfa_enabled: boolean
-        cfa_number: optional_digits
-        cfa_voicemail: boolean
-        cfb_enabled: boolean
-        cfb_number: optional_digits
-        cfb_voicemail: boolean
-        cfda_enabled: boolean
-        cfda_number: optional_digits
-        cfda_voicemail: boolean
-        cfnr_enabled: boolean
-        cfnr_number: optional_digits
-        cfnr_voicemail: boolean
-        inv_timer: digits
-        list_to_voicemail: boolean
-        ornaments: array
-        privacy: boolean
-        reject_anonymous: boolean
-        reject_anonymous_to_voicemail: boolean
-        ring_ready: boolean
-        timezone: timezone
-        use_blacklist: boolean
-        use_whitelist: boolean
+      do ->
+        assert = (t,m) ->
+          if not t
+            throw error: m ? 'assertion failed'
+        assert ( digits '12345'             ) , 'digits'
+        assert ( not digits '123f5'         ) , 'not digits'
+        assert ( not digits null            ) , 'not digits'
+        assert ( boolean true               ) , 'boolean'
+        assert ( boolean false              ) , 'boolean'
+        assert ( not boolean 3              ) , 'not boolean'
+        assert ( not boolean null           ) , 'not boolean'
+        assert ( optional_digits null       ) , 'optional digits'
+        assert ( optional_digits '42'       ) , 'optional digits'
+        assert ( not optional_digits true   ) , 'not optional digits'
+        assert ( array []                   ) , 'array'
+        assert ( array [12,34,56]           ) , 'array'
+        assert ( not array true             ) , 'not array'
+        assert ( not array null             ) , 'not array'
+        assert ( not array {}               ) , 'not array'
+        assert ( not array 'foo'            ) , 'not array'
+        assert ( timezone 'UTC'             ) , 'timezone'
+        assert ( timezone 'Europe/Paris'    ) , 'timezone'
+        assert ( not timezone null          ) , 'not timezone'
+        assert ( language 'fr'              ) , 'language'
+        assert ( language 'en'              ) , 'language'
+        assert ( not language null          ) , 'not language'
 
-      global_number:
-        language: language
-        local_number: (v) -> may "number:#{v}"
+      Validate =
+        local_number:
+          cfa_enabled: boolean
+          cfa_number: optional_digits
+          cfa_voicemail: boolean
+          cfb_enabled: boolean
+          cfb_number: optional_digits
+          cfb_voicemail: boolean
+          cfda_enabled: boolean
+          cfda_number: optional_digits
+          cfda_voicemail: boolean
+          cfnr_enabled: boolean
+          cfnr_number: optional_digits
+          cfnr_voicemail: boolean
+          inv_timer: digits
+          list_to_voicemail: boolean
+          ornaments: array
+          privacy: boolean
+          reject_anonymous: boolean
+          reject_anonymous_to_voicemail: boolean
+          ring_ready: boolean
+          timezone: timezone
+          use_blacklist: boolean
+          use_whitelist: boolean
 
-      endpoint: {}
+        global_number:
+          language: language
+          local_number: (v) -> may "number:#{v}"
 
-      number_domain:
-        fifos: array
+        endpoint: {}
 
-    return (newDoc, oldDoc, userCtx, secObj) ->
+        number_domain:
+          fifos: array
 
       {name,roles} = userCtx
       {owner} = secObj
