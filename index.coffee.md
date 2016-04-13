@@ -33,7 +33,8 @@ So:
 
     read = do ->
       fs = require 'fs'
-      (file) -> fs.readFileSync file, 'utf8'
+      path = require 'path'
+      (file) -> fs.readFileSync path.join(__dirname,file), 'utf8'
 
     update = seem (db,doc) ->
       {_rev} = yield db.get doc._id
@@ -50,14 +51,14 @@ The design document for the user's provisioning database.
       _id: "_design/#{id}"
       language: 'coffeescript'
 
-      validate_doc_update: read './validate_user_doc.coffee'
+      validate_doc_update: read 'validate_user_doc.coffee'
 
       views:
         lib:
-          deepEqual: read './lib/deepEqual.coffee'
-          replicated_ids: read './lib/replicated_ids.coffee'
+          deepEqual: read 'lib/deepEqual.coffee'
+          replicated_ids: read 'lib/replicated_ids.coffee'
       filters:
-        to_provisioning: read './filter-to-provisioning.coffee'
+        to_provisioning: read 'filter-to-provisioning.coffee'
 
 The design document for the shared provisioning database.
 
@@ -67,10 +68,10 @@ The design document for the shared provisioning database.
 
       views:
         lib:
-          deepEqual: read './lib/deepEqual.coffee'
-          replicated_ids: read './lib/replicated_ids.coffee'
+          deepEqual: read 'lib/deepEqual.coffee'
+          replicated_ids: read 'lib/replicated_ids.coffee'
       filters:
-        from_provisioning: read './filter-from-provisioning.coffee'
+        from_provisioning: read 'filter-from-provisioning.coffee'
 
     @include = ->
 
