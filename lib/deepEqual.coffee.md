@@ -3,7 +3,7 @@ except that
 doc content is supposed to be JSON, so do not account for
 Date, Buffer, arguments, etc.
 
-    exports = (a,b) ->
+    module.exports = deepEqual = (a,b) ->
       # Identical values: null, string, numbers, booleans
       return true if a is b
       return false if typeof a isnt typeof b

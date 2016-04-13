@@ -21,17 +21,16 @@
 
     describe 'Loading', ->
       read = (file) -> (require 'fs').readFileSync file, 'utf8'
-      c = require 'coffee-script'
       cc = (m) ->
-        c.eval m.replace /// lib/([^']+)' ///, "./lib/$1.coffee'"
+        eval m.replace /// 'lib/([^']+)' ///, "'../lib/$1.js'"
       it 'filter-from-provisioning', ->
-        f = cc read './filter-from-provisioning.coffee'
+        f = cc read './filter-from-provisioning.js'
         f.should.be.a 'function'
       it 'filter-to-provisioning', ->
-        f = cc read './filter-to-provisioning.coffee'
+        f = cc read './filter-to-provisioning.js'
         f.should.be.a 'function'
       it 'validate_user_doc', ->
-        f = cc read './validate_user_doc.coffee'
+        f = cc read './validate_user_doc.js'
         f.should.be.a 'function'
 
         oldDoc =
