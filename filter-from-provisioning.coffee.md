@@ -1,4 +1,4 @@
-    module.exports = (doc, {query:roles}) ->
+    module.exports = (doc, {query:{roles}}) ->
       roles = JSON.parse roles
       replicated_ids = require 'lib/replicated_ids'
       may = (role) -> role in roles
