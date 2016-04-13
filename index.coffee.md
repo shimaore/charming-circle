@@ -141,6 +141,8 @@ Replication
           pull:
             live: true
             filter: "#{id}/from_provisioning"
+            query_params:
+              roles: JSON.stringify @session.couchdb_roles
 
 - Force filtered replication back to provisioning (continuous)
 
