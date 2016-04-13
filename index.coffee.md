@@ -37,7 +37,9 @@ So:
       (file) -> fs.readFileSync path.join(__dirname,file), 'utf8'
 
     update = seem (db,doc) ->
-      {_rev} = yield db.get doc._id
+      {_rev} = yield db
+        .get doc._id
+        .catch -> {}
       doc._rev = _rev
       db.put doc
 
