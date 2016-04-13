@@ -51,16 +51,15 @@ The design document for the user's provisioning database.
 
     ddoc =
       _id: "_design/#{id}"
-      language: 'coffeescript'
+      language: 'javascript'
 
-      validate_doc_update: read 'validate_user_doc.coffee'
+      validate_doc_update: read 'validate_user_doc.js'
 
-      views:
-        lib:
-          deepEqual: read 'lib/deepEqual.coffee'
-          replicated_ids: read 'lib/replicated_ids.coffee'
+      lib:
+        deepEqual: read 'lib/deepEqual.js'
+        replicated_ids: read 'lib/replicated_ids.js'
       filters:
-        to_provisioning: read 'filter-to-provisioning.coffee'
+        to_provisioning: read 'filter-to-provisioning.js'
 
 The design document for the shared provisioning database.
 
@@ -68,12 +67,11 @@ The design document for the shared provisioning database.
       _id: "_design/#{id}"
       language: 'coffeescript'
 
-      views:
-        lib:
-          deepEqual: read 'lib/deepEqual.coffee'
-          replicated_ids: read 'lib/replicated_ids.coffee'
+      lib:
+        deepEqual: read 'lib/deepEqual.js'
+        replicated_ids: read 'lib/replicated_ids.js'
       filters:
-        from_provisioning: read 'filter-from-provisioning.coffee'
+        from_provisioning: read 'filter-from-provisioning.js'
 
     @include = ->
 
