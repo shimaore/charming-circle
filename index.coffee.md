@@ -76,7 +76,9 @@ The design document for the shared provisioning database.
 
 Put source filter in master.
 
-      prov_url = "#{@cfg.data.url}/provisioning"
+* cfg.data.url (URL with auth) points to the spicy-action services.
+
+      prov_url = "#{ @cfg.data.url }/provisioning"
       prov = new PouchDB prov_url
       update prov, src_ddoc
 
@@ -91,7 +93,7 @@ Create user DB
 
         @session.database ?= "u#{uuid.v4()}"
 
-        url = "#{@cfg.data.url}/#{@session.database}"
+        url = "#{ @cfg.data.url }/#{@session.database}"
 
         db = new PouchDB url
         yield db.info()
