@@ -1,4 +1,4 @@
-    module.exports = (newDoc, oldDoc, userCtx, secObj) ->
+    module.exports = (doc, oldDoc, userCtx, secObj) ->
 
       # validate_user_doc.coffee
       deepEqual = require 'lib/deepEqual'
@@ -74,17 +74,15 @@
       {name,roles} = userCtx
       {owner} = secObj
 
-      doc = newDoc
-
       may = (role) -> role in roles
-      has = (field) -> field of newDoc
+      has = (field) -> field of doc
       had = (field) -> field of oldDoc
       forbidden = (reason) -> throw forbidden: reason
       required = (field) ->
         forbidden "Missing `#{field}` field." unless has field
 
       # Only validate content that might be replicated.
-      unless m = newDoc._id.match /^(number|endpoint|number_domain):(.+)$/
+      unless m = doc._id.match /^(number|endpoint|number_domain):(.+)$/
         return
 
       type = m[1]
@@ -104,10 +102,10 @@
       unless has 'updated_by'
         forbidden 'Field `updated_by` is required.'
 
-      unless newDoc.updated_by is name
+      unless doc.updated_by is name
         forbidden "Field `updated_by` must contain `#{name}`."
 
-      if newDoc.user_access is false
+      if doc.user_access is false
         forbidden 'You may not set `user_access` to false.'
 
       might = ->
@@ -150,14 +148,14 @@
         else
           forbidden "Internal error on `#{type}`."
 
-      for own k of newDoc when k isnt 'updated_by'
+      for own k of doc when k isnt 'updated_by'
         unless had k
           forbidden "Field `#{k}` was added."
       for own k of oldDoc
         unless has k
           forbidden "Field `#{k}` was removed."
-      for own k,v of newDoc when k isnt 'updated_by'
-        unless validate_field[k]?(v) or deepEqual oldDoc[k], newDoc[k]
+      for own k,v of doc when k isnt 'updated_by'
+        unless validate_field[k]?(v) or deepEqual oldDoc[k], doc[k]
           forbidden "Field `#{k}` was modified"
 
       # OK, everything is fine!
