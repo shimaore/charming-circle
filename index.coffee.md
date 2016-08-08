@@ -91,6 +91,8 @@ Create user DB
 
         @session.database ?= "u#{uuid.v4()}"
 
+        @save_user?()
+
         url = "#{ @cfg.data.url }/#{@session.database}"
 
         db = new PouchDB url
