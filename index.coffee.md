@@ -45,7 +45,6 @@ So:
 
 The design document for the user's provisioning database.
 
-    deepEqual = require './lib/deepEqual'
     replicated_ids = require './lib/replicated_ids'
 
     ddoc =
@@ -55,8 +54,8 @@ The design document for the user's provisioning database.
       validate_doc_update: p_fun require './validate_user_doc'
 
       lib:
-        deepEqual: p_fun deepEqual
         replicated_ids: p_fun replicated_ids
+
       filters:
         to_provisioning: p_fun require './filter-to-provisioning'
 
@@ -67,7 +66,6 @@ The design document for the shared provisioning database.
       language: 'javascript'
 
       lib:
-        deepEqual: p_fun deepEqual
         replicated_ids: p_fun replicated_ids
       filters:
         from_provisioning: p_fun require './filter-from-provisioning'

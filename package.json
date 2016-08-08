@@ -14,7 +14,8 @@
     "coffeescript-helpers": "^2.2.0",
     "pouchdb": "^5.3.1",
     "superagent": "^1.8.3",
-    "superagent-as-promised": "^4.0.0"
+    "superagent-as-promised": "^4.0.0",
+    "windy-moon": "^1.0.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
