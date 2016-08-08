@@ -12,7 +12,7 @@
   "license": "Unlicense",
   "dependencies": {
     "coffeescript-helpers": "^2.2.0",
-    "pouchdb": "^5.3.1",
+    "pouchdb": "^5.4.5",
     "superagent": "^1.8.3",
     "superagent-as-promised": "^4.0.0",
     "windy-moon": "^1.0.1"

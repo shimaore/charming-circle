@@ -128,7 +128,7 @@ Set security document on user DB
 Close
 -----
 
-        db.emit 'destroyed'
+        yield db.close()
         db = null
 
 Replication
