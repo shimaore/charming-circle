@@ -169,6 +169,8 @@ Cancel the replication and close the database after a while.
 Return db name (it is up to the application to do a first run, then monitor changes)
 
         @ack @session.database
+        rep.on 'complete', =>
+          @emit 'user-provisioning:ready', @session.database
 
 CDRs
 ====
@@ -187,3 +189,4 @@ Set Voicemail Security
 Return the db name
 
         @ack voicemail_db
+        @emit 'user-voicemail:ready', voicemail_db
