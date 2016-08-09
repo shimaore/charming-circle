@@ -117,7 +117,7 @@ Set security document on user DB
 - The user is a reader/writer.
 - The user is not an admin on their own DB.
 
-        set_security @session.database, @cfg.data.url, [user]
+        yield set_security @session.database, @cfg.data.url, [user]
 
 Close
 -----
