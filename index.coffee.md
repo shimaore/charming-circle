@@ -43,16 +43,17 @@ The design document for the user's provisioning database.
       _id: "_design/#{id}"
       language: 'javascript'
 
-      lib:
-        main: lib_main
+      views:
+        lib:
+          main: lib_main
 
       validate_doc_update: fun '''
-        require('lib/main').validate_user_doc
+        require('views/lib/main').validate_user_doc
       '''
 
       filters:
         provisioning: fun '''
-          require('lib/main').provisioning
+          require('views/lib/main').provisioning
         '''
 
 The design document for the shared provisioning database.
@@ -61,16 +62,16 @@ The design document for the shared provisioning database.
       _id: "_design/#{id}"
       language: 'javascript'
 
-      lib:
-        main: lib_main
       views:
+        lib:
+          main: lib_main
         roles:
           map: fun '''
-            require('lib/main').provisioning.map
+            require('views/lib/main').provisioning.map
           '''
       filters:
         provisioning: fun '''
-          require('lib/main').provisioning
+          require('views/lib/main').provisioning
         '''
 
     @include = ->
