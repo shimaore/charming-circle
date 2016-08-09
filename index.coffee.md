@@ -51,8 +51,8 @@ The design document for the user's provisioning database.
       '''
 
       filters:
-        to_provisioning: fun '''
-          require('lib/main').to_provisioning
+        provisioning: fun '''
+          require('lib/main').provisioning
         '''
 
 The design document for the shared provisioning database.
@@ -66,11 +66,11 @@ The design document for the shared provisioning database.
       views:
         roles:
           map: fun '''
-            require('lib/main').from_provisioning.map
+            require('lib/main').provisioning.map
           '''
       filters:
-        from_provisioning: fun '''
-          require('lib/main').from_provisioning
+        provisioning: fun '''
+          require('lib/main').provisioning
         '''
 
     @include = ->
@@ -86,7 +86,6 @@ Put source filter in master.
 Provisioning without User Database
 ==================================
 
-      {from_provisioning} = main
       @get '/user-prov/:id', ->
 
         unless @session.couchdb_token
@@ -109,7 +108,7 @@ Provisioning without User Database
           @json error:'Missing'
           return
 
-        unless from_provisioning.filter doc, @session.couchdb_roles
+        unless main.provisioning.filter doc, @session.couchdb_roles
           @res.status 404
           @json error:'Missing'
           return
@@ -132,7 +131,6 @@ Provisioning without User Database
 
         @json rows.map (row) -> row.doc
 
-      {validate_user_doc,to_provisioning} = main
       @put '/user-prov/:id', jsonBody, ->
         unless @session.couchdb_token
           @res.status 400
@@ -176,13 +174,13 @@ Provisioning without User Database
             roles: []
 
         try
-          validate_user_doc doc, oldDoc, userCtx, secObj
+          main.validate_user_doc doc, oldDoc, userCtx, secObj
         catch error
           @res.status 400
           @json {error}
           return
 
-        unless to_provisioning.filter doc, @session.couchdb_roles
+        unless main.provisioning.filter doc, @session.couchdb_roles
           @res.status 400
           @json error 'Forbidden'
           return
@@ -236,21 +234,24 @@ Close
 Replication
 -----------
 
+        params =
+          roles: JSON.stringify @session.couchdb_roles
+
         rep = prov.sync url,
 
 - Force filtered replication from provisioning (continuous, create-db) -- filter receives roles as query params -- ideally do this when the user roles are modified, not when the user logs in!
 
           pull:
             live: true
-            filter: "#{id}/from_provisioning"
-            query_params:
-              roles: JSON.stringify @session.couchdb_roles
+            filter: "#{id}/provisioning"
+            query_params: params
 
 - Force filtered replication back to provisioning (continuous)
 
           push:
             live: true
-            filter: "#{id}/to_provisioning"
+            filter: "#{id}/provisioning"
+            query_params: params
 
 Cancel the replication and close the database after a while.
 

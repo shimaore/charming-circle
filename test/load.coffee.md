@@ -17,28 +17,38 @@
         f.should.be.a 'RegExp'
 
     describe 'Loading', ->
-      it 'filter-from-provisioning', ->
+      it 'filter-provisioning', ->
         f = require '../filter-from-provisioning.js'
         f.should.be.a 'function'
-      it 'filter-to-provisioning', ->
-        f = require '../filter-to-provisioning.js'
-        f.should.be.a 'function'
-      it 'validate_user_doc', ->
-        f = require '../validate_user_doc.js'
+      it 'validate-user-doc', ->
+        f = require '../validate-user-doc.js'
         f.should.be.a 'function'
 
     describe 'filter-from-provisioning', ->
         f = require '../filter-from-provisioning'
+
         req = query: roles: JSON.stringify ['number:0123456@example.com','bear:large']
         f(_id:'number:0123456@example.com',req).should.be.true
         f(_id:'endpoint:0123456@example.com',req).should.be.false
         f(_id:'bear:large',req).should.be.false
+
         req = query: roles: JSON.stringify ['number_domain:example.com']
         f(_id:'number:0123456@example.com',req).should.be.true
 
-    describe 'validate_user_doc', ->
+    describe 'filter-to-provisioning', ->
+        f = require '../filter-to-provisioning'
 
-      f = require '../validate_user_doc'
+        req = query: roles: JSON.stringify ['number:0123456@example.com','bear:large']
+        f(_id:'number:0123456@example.com',req).should.be.true
+        f(_id:'endpoint:0123456@example.com',req).should.be.false
+        f(_id:'bear:large',req).should.be.false
+
+        req = query: roles: JSON.stringify ['number_domain:example.com']
+        f(_id:'number:0123456@example.com',req).should.be.true
+
+    describe 'validate-user-doc', ->
+
+      f = require '../validate-user-doc'
 
       userCtx =
         name: 'jane'
@@ -46,10 +56,6 @@
       secObj =
         members:
           names: ['jane']
-          roles: []
-        admins:
-          names: []
-          roles: []
 
       oldDoc =
         _id: 'number:23@ex1'
