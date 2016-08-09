@@ -30,7 +30,7 @@ CouchDB is finicky and requires parentheses around functions (not in all cases, 
 
     fun = (t) ->
       """ (function(){
-        #{t}.apply(this,arguments);
+        return #{t}.apply(this,arguments);
       })
       """
 
