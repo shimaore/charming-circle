@@ -20,13 +20,13 @@ Set the proper security document.
         .put "#{base}/#{db}/_security"
         .send
           members:
-            users: users
+            names: users
             roles: [
               "user_database:#{db}"
               'update:user_db:'
             ]
           admins:
-            users: []
+            names: []
             roles: [
               '_admin'
             ]
