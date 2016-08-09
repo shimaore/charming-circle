@@ -3,7 +3,7 @@ Set Voicemail Security
 
     request = (require 'superagent-as-promised') require 'superagent'
 
-    module.exports = set_voicemail_security = (voicemail_db,base) ->
+    module.exports = set_voicemail_security = (voicemail_db,base,users = []) ->
       return unless typeof voicemail_db is 'string'
       return unless voicemail_db.match ///
         ^ u
@@ -20,7 +20,7 @@ Set the proper security document on voicemail.
         .put "#{base}/#{voicemail_db}/_security"
         .send
           members:
-            users: []
+            users: users
             roles: [
               "user_database:#{voicemail_db}"
               'update:user_db:'
