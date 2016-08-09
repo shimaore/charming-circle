@@ -6,6 +6,7 @@ Allow clients access to (some) provisioning features
     PouchDB = require 'pouchdb'
     {p_fun} = require 'coffeescript-helpers'
     fs = require 'fs'
+    path = require 'path'
 
     set_voicemail_security = require './set-voicemail-security'
 
@@ -33,7 +34,7 @@ CouchDB is finicky and requires parentheses around functions (not in all cases, 
       })
       """
 
-    lib_main = fs.readFileSync './main.bundle.js', 'utf-8'
+    lib_main = fs.readFileSync path.join(__dirname,'main.bundle.js'), 'utf-8'
 
 The design document for the user's provisioning database.
 
