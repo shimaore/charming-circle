@@ -5,6 +5,7 @@ Allow clients access to (some) provisioning features
     seem = require 'seem'
     PouchDB = require 'pouchdb'
     {p_fun} = require 'coffeescript-helpers'
+    fs = require 'fs'
 
     set_voicemail_security = require './set-voicemail-security'
 
@@ -22,21 +23,35 @@ Allow clients access to (some) provisioning features
 
     id = "#{pkg.name}@#{pkg.version}"
 
-The design document for the user's provisioning database.
+### Encapsulate the function for CouchDB
 
-    replicated_ids = require './lib/replicated_ids'
+CouchDB is finicky and requires parentheses around functions (not in all cases, but it's better to be safe).
+
+    fun = (t) ->
+      """ (function(){
+        #{t}.apply(this,arguments);
+      })
+      """
+
+    lib_main = fs.readFileSync './main.js', 'utf-8'
+
+The design document for the user's provisioning database.
 
     ddoc =
       _id: "_design/#{id}"
       language: 'javascript'
 
-      validate_doc_update: p_fun require './validate_user_doc'
-
       lib:
-        replicated_ids: p_fun replicated_ids
+        main: lib_main
+
+      validate_doc_update: fun '''
+        require('lib/main').validate_user_doc
+      '''
 
       filters:
-        to_provisioning: p_fun require './filter-to-provisioning'
+        to_provisioning: fun '''
+          require('lib/main').to_provisioning
+        '''
 
 The design document for the shared provisioning database.
 
@@ -45,9 +60,11 @@ The design document for the shared provisioning database.
       language: 'javascript'
 
       lib:
-        replicated_ids: p_fun replicated_ids
+        main: lib_main
       filters:
-        from_provisioning: p_fun require './filter-from-provisioning'
+        from_provisioning: fun '''
+          require('lib/main').from_provisioning
+        '''
 
     @include = ->
 

@@ -12,29 +12,19 @@
       it 'set-voicemail-security', ->
         f = require '../set-voicemail-security'
         f.should.be.a 'function'
-      it 'lib/deepEqual', ->
-        f = require '../lib/deepEqual'
-        f.should.be.a 'function'
       it 'lib/replicated_ids', ->
         f = require '../lib/replicated_ids'
         f.should.be.a 'RegExp'
 
     describe 'Loading', ->
-      {p_fun} = require 'coffeescript-helpers'
-      read = (file) -> (require 'fs').readFileSync file, 'utf8'
-      cc = (m) ->
-        req = "(function (module) { return #{p_fun m}\n})".replace /// 'lib/([^']+)' ///, "'../lib/$1'"
-        mo = exports:{}
-        (eval req) mo
-        mo.exports
       it 'filter-from-provisioning', ->
-        f = cc read './filter-from-provisioning.js'
+        f = require '../filter-from-provisioning.js'
         f.should.be.a 'function'
       it 'filter-to-provisioning', ->
-        f = cc read './filter-to-provisioning.js'
+        f = require '../filter-to-provisioning.js'
         f.should.be.a 'function'
       it 'validate_user_doc', ->
-        f = cc read './validate_user_doc.js'
+        f = require '../validate_user_doc.js'
         f.should.be.a 'function'
 
         oldDoc =

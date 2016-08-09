@@ -1,6 +1,6 @@
     module.exports = (doc, {query:{roles}}) ->
       roles = JSON.parse roles
-      replicated_ids = require 'lib/replicated_ids'
+      replicated_ids = require './lib/replicated_ids'
       may = (role) -> role in roles
 
       # Do not replicate if the document is flagged for no user replication.
