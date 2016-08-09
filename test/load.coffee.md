@@ -32,12 +32,11 @@
       f = require '../validate_user_doc'
 
       userCtx =
-        name: 'foo'
+        name: 'jane'
         roles: [ 'juggler', 'number:23@ex1' ]
       secObj =
-        owner: 'foo'
         members:
-          names: []
+          names: ['jane']
           roles: []
         admins:
           names: []
@@ -57,7 +56,7 @@
           number: '23@ex1'
           cfa_number: '54'
           cfa_enabled: true
-          updated_by: 'foo'
+          updated_by: 'jane'
 
         try
           f newDoc,oldDoc,userCtx,secObj
@@ -74,7 +73,7 @@
           number: '23@ex1'
           cfa_number: '54'
           account: 'mememe'
-          updated_by: 'foo'
+          updated_by: 'joe'
 
         should.Throw -> f newDoc,oldDoc,userCtx,secObj
 
