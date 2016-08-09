@@ -4,6 +4,7 @@ Allow clients access to (some) provisioning features
     request = (require 'superagent-as-promised') require 'superagent'
     seem = require 'seem'
     PouchDB = require 'pouchdb'
+    jsonBody = require 'body/json'
     fs = require 'fs'
     path = require 'path'
 
@@ -34,6 +35,7 @@ CouchDB is finicky and requires parentheses around functions (not in all cases, 
       """
 
     lib_main = fs.readFileSync path.join(__dirname,'main.bundle.js'), 'utf-8'
+    main = require './main'
 
 The design document for the user's provisioning database.
 
@@ -80,6 +82,113 @@ Put source filter in master.
       prov_url = "#{ @cfg.data.url }/provisioning"
       prov = new PouchDB prov_url
       update prov, src_ddoc
+
+Provisioning without User Database
+==================================
+
+      {from_provisioning} = main
+      @get '/user-prov/:id', ->
+
+        unless @session.couchdb_token
+          @res.status 400
+          @json error:'No session'
+          return
+
+        id = @params.id
+        unless id?
+          @res.status 400
+          @json error:'No ID'
+          return
+
+        doc = yield prov
+          .get id
+          .catch -> null
+
+        unless doc?
+          @res.status 404
+          @json error:'Missing'
+          return
+
+        unless from_provisioning.filter doc, @session.couchdb_roles
+          @res.status 404
+          @json error:'Missing'
+          return
+
+        @json doc
+        return
+
+      @get '/user-prov/_all_docs', ->
+
+        unless @session.couchdb_token
+          @res.status 400
+          @json error:'No session'
+          return
+
+        rows = yield prov
+          .query "#{id}/roles",
+            reduce: false
+            include_docs: true
+            keys: @session.couchdb_roles
+
+        @json rows.map (row) -> row.doc
+
+      {validate_user_doc,to_provisioning} = main
+      @put '/user-prov/:id', jsonBody, ->
+        unless @session.couchdb_token
+          @res.status 400
+          @json error:'No session'
+          return
+
+        id = @params.id
+        unless id?
+          @res.status 400
+          @json error:'No ID'
+          return
+
+        doc = @body
+        unless doc?
+          @res.status 400
+          @json error:'Missing JSON document'
+          return
+
+        unless doc._id? and doc._id is id
+          @res.status 400
+          @json error:'ID does not match'
+          return
+
+        oldDoc = yield prov
+          .get id
+          .catch -> null
+
+        user = @session.couchdb_username
+
+        userCtx =
+          db: 'user-prov'
+          name: user
+          roles: @session.couchdb_roles ? []
+
+        secObj =
+          members:
+            names: [user]
+            roles: []
+          admins:
+            names: []
+            roles: []
+
+        try
+          validate_user_doc doc, oldDoc, userCtx, secObj
+        catch error
+          @res.status 400
+          @json {error}
+          return
+
+        unless to_provisioning.filter doc, @session.couchdb_roles
+          @res.status 400
+          @json error 'Forbidden'
+          return
+
+        @json doc
+        return
 
 Provisioning User Database
 ==========================

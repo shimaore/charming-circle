@@ -11,6 +11,7 @@
   "author": "Stéphane Alnet <stephane@shimaore.net> (http://stephane.shimaore.net/)",
   "license": "Unlicense",
   "dependencies": {
+    "body": "^5.1.0",
     "pouchdb": "^5.4.5",
     "superagent": "^2.1.0",
     "superagent-as-promised": "^4.0.0",
