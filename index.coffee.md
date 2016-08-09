@@ -4,7 +4,6 @@ Allow clients access to (some) provisioning features
     request = (require 'superagent-as-promised') require 'superagent'
     seem = require 'seem'
     PouchDB = require 'pouchdb'
-    {p_fun} = require 'coffeescript-helpers'
     fs = require 'fs'
     path = require 'path'
 
