@@ -62,6 +62,11 @@ The design document for the shared provisioning database.
 
       lib:
         main: lib_main
+      views:
+        roles:
+          map: fun '''
+            require('lib/main').from_provisioning.map
+          '''
       filters:
         from_provisioning: fun '''
           require('lib/main').from_provisioning

@@ -1,8 +1,9 @@
     module.exports = (doc, {query:{roles}}) ->
       roles = JSON.parse roles
       filter doc, roles
-      replicated_ids = require './lib/replicated_ids'
-      may = (role) -> role in roles
+
+    may = (role) -> role in roles
+    replicated_ids = require './lib/replicated_ids'
 
     module.exports.filter = filter = (doc,roles) ->
 
@@ -20,3 +21,11 @@
         return true if may "number_domain:#{domain}"
 
       return false
+
+    module.exports.map = map = (doc) ->
+      return if doc.user_access is false
+      return unless doc._id.match replicated_ids
+      emit doc._id
+      if m = doc._id.match /^(?:number|endpoint):\d+@(\S+)$/
+        domain = m[1]
+        emit "number_domain:#{domain}"
