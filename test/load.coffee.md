@@ -9,8 +9,8 @@
       it 'package', ->
         f = require '../package'
         f.should.be.an 'Object'
-      it 'set-voicemail-security', ->
-        f = require '../set-voicemail-security'
+      it 'set-security', ->
+        f = require '../set-security'
         f.should.be.a 'function'
       it 'lib/replicated_ids', ->
         f = require '../lib/replicated_ids'

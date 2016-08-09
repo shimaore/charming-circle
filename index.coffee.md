@@ -8,7 +8,7 @@ Allow clients access to (some) provisioning features
     fs = require 'fs'
     path = require 'path'
 
-    set_voicemail_security = require './set-voicemail-security'
+    set_security = require './set-security'
 
     seconds = 1000
     minutes = 60*seconds
@@ -108,21 +108,7 @@ Set security document on user DB
 - The user is a reader/writer.
 - The user is not an admin on their own DB.
 
-        yield request
-          .put "#{url}/_security"
-          .send
-            members:
-              users: [
-                user
-              ]
-              roles: []
-            admins:
-              users: []
-              roles: [
-                '_admin'
-              ]
-            # Non-standard field, shoud still be kept.
-            owner: user
+        set_security @session.database, @cfg.data.url, [user]
 
 Close
 -----
@@ -183,7 +169,7 @@ Set Voicemail Security
 ======================
 
       @on 'user-voicemail', seem (voicemail_db) ->
-        yield set_voicemail_security voicemail_db, @cfg.data.url
+        yield set_security voicemail_db, @cfg.data.url
 
 Return the db name
 
