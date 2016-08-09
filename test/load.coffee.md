@@ -27,24 +27,46 @@
         f = require '../validate_user_doc.js'
         f.should.be.a 'function'
 
-        oldDoc =
-          _id: 'number:23@ex1'
-          type: 'number'
-          number: '23@ex1'
-          cfa_number: '42'
+    describe 'validate_user_doc', ->
+
+      f = require '../validate_user_doc'
+
+      userCtx =
+        name: 'foo'
+        roles: [ 'juggler', 'number:23@ex1' ]
+      secObj =
+        owner: 'foo'
+        members:
+          names: []
+          roles: []
+        admins:
+          names: []
+          roles: []
+
+      oldDoc =
+        _id: 'number:23@ex1'
+        type: 'number'
+        number: '23@ex1'
+        cfa_number: '42'
+
+      it 'should accept valid changes', ->
+
         newDoc =
           _id: 'number:23@ex1'
           type: 'number'
           number: '23@ex1'
           cfa_number: '54'
+          cfa_enabled: true
           updated_by: 'foo'
-        userCtx =
-          name: 'foo'
-          roles: [ 'juggler', 'number:23@ex1' ]
-        secObj =
-          owner: 'foo'
+
+        try
+          f newDoc,oldDoc,userCtx,secObj
+        catch error
+          console.dir error
 
         should.not.Throw -> f newDoc,oldDoc,userCtx,secObj
+
+      it 'should reject invalid changes', ->
 
         newDoc =
           _id: 'number:23@ex1'

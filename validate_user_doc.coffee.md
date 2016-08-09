@@ -1,31 +1,38 @@
+    windy_moon = require 'windy-moon'
+    {optional,digits,boolean,array,timezone,language} = require 'windy-moon/types'
     module.exports = windy_moon.main ->
 
-      {digits,boolean,optional_digits,array,timezone,language} = require 'windy_moon/types'
+      cf = (name) ->
+        (v,doc) ->
+          if doc["cf#{name}_enabled"] and not doc["cf#{name}_voicemail"]
+            digits v
+          else
+            optional digits v
 
       Validate =
         local_number:
-          cfa_enabled: boolean
-          cfa_number: optional_digits
-          cfa_voicemail: boolean
-          cfb_enabled: boolean
-          cfb_number: optional_digits
-          cfb_voicemail: boolean
-          cfda_enabled: boolean
-          cfda_number: optional_digits
-          cfda_voicemail: boolean
-          cfnr_enabled: boolean
-          cfnr_number: optional_digits
-          cfnr_voicemail: boolean
-          inv_timer: digits
-          list_to_voicemail: boolean
-          ornaments: array
-          privacy: boolean
-          reject_anonymous: boolean
-          reject_anonymous_to_voicemail: boolean
-          ring_ready: boolean
-          timezone: timezone
-          use_blacklist: boolean
-          use_whitelist: boolean
+          cfa_enabled: optional boolean
+          cfa_number: cf 'a'
+          cfa_voicemail: optional boolean
+          cfb_enabled: optional boolean
+          cfb_number: cf 'b'
+          cfb_voicemail: optional boolean
+          cfda_enabled: optional boolean
+          cfda_number: cf 'da'
+          cfda_voicemail: optional boolean
+          cfnr_enabled: optional boolean
+          cfnr_number: cf 'nr'
+          cfnr_voicemail: optional boolean
+          inv_timer: optional digits
+          list_to_voicemail: optional boolean
+          ornaments: optional array
+          privacy: optional boolean
+          reject_anonymous: optional boolean
+          reject_anonymous_to_voicemail: optional boolean
+          ring_ready: optional boolean
+          timezone: optional timezone
+          use_blacklist: optional boolean
+          use_whitelist: optional boolean
 
         global_number:
           language: language
@@ -59,7 +66,7 @@
       @forbid_deletion()
       @forbid_creation()
 
-      validate_field = switch @validate_type()
+      validators = switch @validate_type()
         when 'local-number'
           Validate.local_number
 
@@ -75,10 +82,12 @@
         else
           @forbidden "Internal error on `#{@type}`."
 
-      @forbid_adding_fields ['updated_by']
-      @forbid_removing_fields()
-      @validate_fields validate_field, ['updated_by']
-      @forbid_modifying_fields ['updated_by']
+      modifiable_fields = Object.keys validators
+
+      @restrict_adding_fields ['updated_by',modifiable_fields...]
+      @restrict_removing_fields()
+      @validate_fields validators
+      @restrict_modifying_fields ['updated_by',modifiable_fields...]
 
       # OK, everything is fine!
       return
