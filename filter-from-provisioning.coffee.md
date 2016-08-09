@@ -10,8 +10,8 @@
       # Do not replicate if the document is flagged for no user replication.
       return false if doc.user_access is false
 
-      # Only replicate those types, regardless of what roles may contain.
-      # Local-numbers, global-numbers, endpoints, and number-domain.
+      # Only replicate those types, regardless of what `roles` may contain.
+      # Local-numbers, endpoints, and number-domain.
       return false unless doc._id.match replicated_ids
 
       return true if may doc._id
