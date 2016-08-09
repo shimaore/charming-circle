@@ -85,6 +85,13 @@ Put source filter in master.
 Provisioning User Database
 ==========================
 
+See `spicy-action-user` for `@save_user`.
+
+      @helper user_db: seem ->
+        @session.database ?= "u#{uuid.v4()}"
+        yield @save_user?()
+        "#{ @cfg.data.url }/#{@session.database}"
+
       @on 'user-provisioning', seem ->
         return unless @session.couchdb_token
         user = @session.couchdb_username
@@ -92,11 +99,7 @@ Provisioning User Database
 Create user DB
 --------------
 
-        @session.database ?= "u#{uuid.v4()}"
-
-        @save_user?()
-
-        url = "#{ @cfg.data.url }/#{@session.database}"
+        url = yield @user_db()
 
         db = new PouchDB url
         yield db.info()
