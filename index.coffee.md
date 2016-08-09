@@ -33,7 +33,7 @@ CouchDB is finicky and requires parentheses around functions (not in all cases, 
       })
       """
 
-    lib_main = fs.readFileSync './main.js', 'utf-8'
+    lib_main = fs.readFileSync './main.bundle.js', 'utf-8'
 
 The design document for the user's provisioning database.
 
