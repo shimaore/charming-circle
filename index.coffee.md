@@ -164,7 +164,10 @@ Return db name (it is up to the application to do a first run, then monitor chan
 
         @ack @session.database
         rep.on 'complete', =>
-          @emit 'user-provisioning:ready', @session.database
+          @emit 'user-provisioning:content-ready', @session.database
+
+        @emit 'user-provisioning:database-ready', @session.database
+        return
 
 CDRs
 ====
