@@ -86,6 +86,7 @@ Provisioning User Database
 ==========================
 
       @on 'user-provisioning', seem ->
+        return unless @session.couchdb_token
         user = @session.couchdb_username
 
 Create user DB
@@ -174,6 +175,7 @@ Set Voicemail Security
 ======================
 
       @on 'user-voicemail', seem (voicemail_db) ->
+        return unless @session.couchdb_token
         yield set_security voicemail_db, @cfg.data.url
 
 Return the db name
