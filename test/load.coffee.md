@@ -27,6 +27,15 @@
         f = require '../validate_user_doc.js'
         f.should.be.a 'function'
 
+    describe 'filter-from-provisioning', ->
+        f = require '../filter-from-provisioning'
+        req = query: roles: JSON.stringify ['number:0123456@example.com','bear:large']
+        f(_id:'number:0123456@example.com',req).should.be.true
+        f(_id:'endpoint:0123456@example.com',req).should.be.false
+        f(_id:'bear:large',req).should.be.false
+        req = query: roles: JSON.stringify ['number_domain:example.com']
+        f(_id:'number:0123456@example.com',req).should.be.true
+
     describe 'validate_user_doc', ->
 
       f = require '../validate_user_doc'
