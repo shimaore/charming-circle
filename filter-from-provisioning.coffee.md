@@ -1,7 +1,10 @@
     module.exports = (doc, {query:{roles}}) ->
       roles = JSON.parse roles
+      filter doc, roles
       replicated_ids = require './lib/replicated_ids'
       may = (role) -> role in roles
+
+    module.exports.filter = filter = (doc,roles) ->
 
       # Do not replicate if the document is flagged for no user replication.
       return false if doc.user_access is false
