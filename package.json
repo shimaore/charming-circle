@@ -4,7 +4,7 @@
   "description": "Per-user database",
   "main": "index.js",
   "scripts": {
-    "prepublish": "coffee -c *.coffee.md lib/*.coffee.md && webpack",
+    "prepublish": "coffee --no-header -c *.coffee.md lib/*.coffee.md && webpack",
     "pretest": "npm install",
     "test": "mocha"
   },
