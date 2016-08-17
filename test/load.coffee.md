@@ -88,4 +88,5 @@
           @cfg =
             data:
               url: 'foo'
+          @auth = []
           @include '../'

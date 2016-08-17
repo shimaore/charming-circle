@@ -87,12 +87,7 @@ Put source filter in master.
 Provisioning without User Database
 ==================================
 
-      @get '/user-prov/:id', ->
-
-        unless @session.couchdb_token
-          @res.status 400
-          @json error:'No session'
-          return
+      @get '/user-prov/:id', @auth, ->
 
         id = @params.id
         unless id?
@@ -109,7 +104,9 @@ Provisioning without User Database
           @json error:'Missing'
           return
 
-        unless main.provisioning.filter doc, @session.couchdb_roles
+        roles = @session.couchdb_roles ? []
+
+        unless main.provisioning.filter doc, roles
           @res.status 404
           @json error:'Missing'
           return
@@ -117,26 +114,19 @@ Provisioning without User Database
         @json doc
         return
 
-      @get '/user-prov/_all_docs', ->
+      @get '/user-prov/_all_docs', @auth, ->
 
-        unless @session.couchdb_token
-          @res.status 400
-          @json error:'No session'
-          return
+        roles = @session.couchdb_roles ? []
 
         rows = yield prov
           .query "#{id}/roles",
             reduce: false
             include_docs: true
-            keys: @session.couchdb_roles
+            keys: roles
 
         @json rows.map (row) -> row.doc
 
-      @put '/user-prov/:id', jsonBody, ->
-        unless @session.couchdb_token
-          @res.status 400
-          @json error:'No session'
-          return
+      @put '/user-prov/:id', @auth, jsonBody, ->
 
         id = @params.id
         unless id?
@@ -161,10 +151,12 @@ Provisioning without User Database
 
         user = @session.couchdb_username
 
+        roles = @session.couchdb_roles ? []
+
         userCtx =
           db: 'user-prov'
           name: user
-          roles: @session.couchdb_roles ? []
+          roles: roles
 
         secObj =
           members:
@@ -181,7 +173,7 @@ Provisioning without User Database
           @json {error}
           return
 
-        unless main.provisioning.filter doc, @session.couchdb_roles
+        unless main.provisioning.filter doc, roles
           @res.status 400
           @json error 'Forbidden'
           return
