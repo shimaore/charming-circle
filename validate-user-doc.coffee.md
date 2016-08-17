@@ -23,7 +23,7 @@
           cfnr_enabled: optional boolean
           cfnr_number: cf 'nr'
           cfnr_voicemail: optional boolean
-          inv_timer: optional digits
+          inv_timer: optional (v) -> typeof v is 'number'
           list_to_voicemail: optional boolean
           ornaments: optional array
           privacy: optional boolean

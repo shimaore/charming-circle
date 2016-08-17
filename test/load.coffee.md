@@ -60,6 +60,7 @@
           number: '23@ex1'
           cfa_number: '54'
           cfa_enabled: true
+          inv_timer: 14
           updated_by: 'jane'
 
         try
