@@ -178,7 +178,13 @@ Provisioning without User Database
           @json error 'Forbidden'
           return
 
-        @json doc
+        response = yield prov
+          .put doc
+          .catch (error) ->
+            @res.status 400
+            {error}
+
+        @json response
         return
 
 Provisioning User Database
