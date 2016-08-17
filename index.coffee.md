@@ -87,6 +87,18 @@ Put source filter in master.
 Provisioning without User Database
 ==================================
 
+      @get '/user-prov/_all_docs', @auth, ->
+
+        roles = @session.couchdb_roles ? []
+
+        rows = yield prov
+          .query "#{id}/roles",
+            reduce: false
+            include_docs: true
+            keys: roles
+
+        @json rows.map (row) -> row.doc
+
       @get '/user-prov/:id', @auth, ->
 
         id = @params.id
@@ -113,18 +125,6 @@ Provisioning without User Database
 
         @json doc
         return
-
-      @get '/user-prov/_all_docs', @auth, ->
-
-        roles = @session.couchdb_roles ? []
-
-        rows = yield prov
-          .query "#{id}/roles",
-            reduce: false
-            include_docs: true
-            keys: roles
-
-        @json rows.map (row) -> row.doc
 
       @put '/user-prov/:id', @auth, jsonBody, ->
 
