@@ -4,7 +4,7 @@ Allow clients access to (some) provisioning features
     request = (require 'superagent-as-promised') require 'superagent'
     seem = require 'seem'
     PouchDB = require 'pouchdb'
-    jsonBody = require 'body/json'
+    jsonBody = (require 'body-parser').json {}
     fs = require 'fs'
     path = require 'path'
 
