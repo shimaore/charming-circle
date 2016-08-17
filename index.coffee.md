@@ -91,7 +91,7 @@ Provisioning without User Database
 
         roles = @session.couchdb_roles ? []
 
-        rows = yield prov
+        {rows} = yield prov
           .query "#{id}/roles",
             reduce: false
             include_docs: true
