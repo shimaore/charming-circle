@@ -288,6 +288,12 @@ Results come from a view and only show a limited set of fields.
 Set Voicemail Security
 ======================
 
+      @get '/user-voicemail/:voicemail_db', seem ->
+        voicemail_db = @params.voicemail_db
+        if @session.couchdb_token
+          yield set_security voicemail_db, @cfg.data.url
+        @json ok:true
+
       @on 'user-voicemail', seem (voicemail_db) ->
         return unless @session.couchdb_token
         yield set_security voicemail_db, @cfg.data.url
