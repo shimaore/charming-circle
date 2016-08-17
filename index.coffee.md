@@ -101,14 +101,14 @@ Provisioning without User Database
 
       @get '/user-prov/:id', @auth, ->
 
-        id = @params.id
-        unless id?
+        doc_id = @params.id
+        unless doc_id?
           @res.status 400
           @json error:'No ID'
           return
 
         doc = yield prov
-          .get id
+          .get doc_id
           .catch -> null
 
         unless doc?
@@ -128,8 +128,8 @@ Provisioning without User Database
 
       @put '/user-prov/:id', @auth, jsonBody, ->
 
-        id = @params.id
-        unless id?
+        doc_id = @params.id
+        unless doc_id?
           @res.status 400
           @json error:'No ID'
           return
@@ -140,13 +140,13 @@ Provisioning without User Database
           @json error:'Missing JSON document'
           return
 
-        unless doc._id? and doc._id is id
+        unless doc._id? and doc._id is doc_id
           @res.status 400
           @json error:'ID does not match'
           return
 
         oldDoc = yield prov
-          .get id
+          .get doc_id
           .catch -> null
 
         user = @session.couchdb_username
