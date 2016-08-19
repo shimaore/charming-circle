@@ -64,7 +64,7 @@
       # Authorize based on content / changes
 
       @forbid_deletion()
-      @forbid_creation()
+      # @forbid_creation() # No, because in this case we can't replicate, can we?
 
       validators = switch @validate_type()
         when 'local-number'
