@@ -21,7 +21,7 @@
     "chai": "^3.5.0",
     "coffee-script": "^1.10.0",
     "mocha": "^3.0.2",
-    "webpack": "^1.13.1",
+    "webpack": "^1.13.2",
     "windy-moon": "^4.0.2",
     "zappajs": "^5.2.0"
   },

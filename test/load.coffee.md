@@ -19,7 +19,9 @@
     describe 'Loading', ->
       it 'provisioning', ->
         f = require '../provisioning.js'
-        f.should.be.a 'function'
+        f.should.be.a 'object'
+        f.should.have.property 'filter'
+        f.should.have.property 'map'
       it 'validate-user-doc', ->
         f = require '../validate-user-doc.js'
         f.should.be.a 'function'
