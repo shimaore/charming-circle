@@ -7,6 +7,7 @@ Allow clients access to (some) provisioning features
     jsonBody = (require 'body-parser').json {}
     fs = require 'fs'
     path = require 'path'
+    uuid = require 'uuid'
 
     set_security = require './set-security'
 

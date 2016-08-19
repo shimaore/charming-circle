@@ -15,6 +15,7 @@
     "pouchdb": "^5.4.5",
     "superagent": "^2.2.0",
     "superagent-as-promised": "^4.0.0",
+    "uuid": "^2.0.2",
     "windy-moon": "^4.0.2"
   },
   "devDependencies": {
