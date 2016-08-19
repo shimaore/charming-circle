@@ -11,6 +11,9 @@ Allow clients access to (some) provisioning features
 
     set_security = require './set-security'
 
+    @name = (require './package').name
+    debug = (require 'debug') @name
+
     seconds = 1000
     minutes = 60*seconds
 
@@ -185,11 +188,13 @@ Provisioning User Database
 See `spicy-action-user` for `@save_user`.
 
       @helper user_db: seem ->
+        debug 'user_db', @
         @session.database ?= "u#{uuid.v4()}"
         yield @save_user?()
         "#{ @cfg.data.url }/#{@session.database}"
 
       @on 'user-provisioning', seem ->
+        debug 'user-provisioning', @session
         return unless @session.couchdb_token
         user = @session.couchdb_username
 

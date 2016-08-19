@@ -2,6 +2,8 @@ Set Security
 ============
 
     request = (require 'superagent-as-promised') require 'superagent'
+    name = "#{(require './package').name}:set-security"
+    debug = (require 'debug') name
 
     module.exports = set_security = (db,base,users = []) ->
       return unless typeof db is 'string'
