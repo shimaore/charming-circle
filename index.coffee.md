@@ -26,7 +26,7 @@ Allow clients access to (some) provisioning features
 
     pkg = require './package'
 
-    id = "#{pkg.name}@#{pkg.version}"
+    id = "#{pkg.name}"
 
 ### Encapsulate the function for CouchDB
 
