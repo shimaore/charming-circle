@@ -51,11 +51,6 @@ The design document for the user's provisioning database.
         require('views/lib/main').validate_user_doc
       '''
 
-      filters:
-        provisioning: fun '''
-          require('views/lib/main').provisioning
-        '''
-
 The design document for the shared provisioning database.
 
     src_ddoc =
@@ -69,14 +64,10 @@ The design document for the shared provisioning database.
           map: fun '''
             require('views/lib/main').provisioning.map
           '''
-      filters:
-        provisioning: fun '''
-          require('views/lib/main').provisioning
-        '''
 
     @include = ->
 
-Put source filter in master.
+Put source design document in master.
 
 * cfg.data.url (URL with auth) points to the spicy-action services.
 
@@ -233,24 +224,28 @@ Close
 Replication
 -----------
 
-        params =
-          roles: JSON.stringify @session.couchdb_roles
+        roles = @session.couchdb_roles ? []
+
+        {rows} = yield prov
+          .query "#{id}/roles",
+            reduce: false
+            keys: roles
+
+        doc_ids = rows.map (row) -> row.id
 
         rep = prov.sync url,
 
-- Force filtered replication from provisioning (continuous, create-db) -- filter receives roles as query params -- ideally do this when the user roles are modified, not when the user logs in!
+- Force replication from provisioning (continuous, create-db)
 
           pull:
             live: true
-            filter: "#{id}/provisioning"
-            query_params: params
+            doc_ids: doc_ids
 
-- Force filtered replication back to provisioning (continuous)
+- Force replication back to provisioning (continuous)
 
           push:
             live: true
-            filter: "#{id}/provisioning"
-            query_params: params
+            doc_ids: doc_ids
 
 Cancel the replication and close the database after a while.
 
