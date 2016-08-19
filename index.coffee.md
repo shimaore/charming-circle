@@ -188,12 +188,15 @@ Provisioning User Database
 See `spicy-action-user` for `@save_user`.
 
       @helper user_db: seem ->
-        debug 'user_db', @
+        debug 'user_db'
         @session.database ?= "u#{uuid.v4()}"
         yield @save_user?()
         "#{ @cfg.data.url }/#{@session.database}"
 
       @on 'user-provisioning', seem ->
+        @load_user?()
+          .catch (error) ->
+            debug "user-provisioning: load_user failed: #{error}"
         debug 'user-provisioning', @session
         return unless @session.couchdb_token
         user = @session.couchdb_username
@@ -202,6 +205,8 @@ Create user DB
 --------------
 
         url = yield @user_db()
+
+        debug 'user_db', url
 
         db = new PouchDB url
         yield db.info()
@@ -239,6 +244,8 @@ Replication
 
         doc_ids = rows.map (row) -> row.id
 
+        debug 'user-provisioning: going to replicate', doc_ids
+
         rep = prov.sync url,
 
 - Force replication from provisioning (continuous, create-db)
@@ -263,11 +270,21 @@ Cancel the replication and close the database after a while.
         setTimeout cancel, @cfg.replication_timeout ? 30*minutes
 
         rep
-          .on 'paused', => @emit 'replication:paused'
-          .on 'active', => @emit 'replication:active'
-          .on 'denied', => @emit 'replication:denied'
-          .on 'complete', => @emit 'replication:complete'
-          .on 'error', => @emit 'replication:error'
+          .on 'paused', =>
+            debug 'replication:paused'
+            @emit 'replication:paused'
+          .on 'active', =>
+            debug 'replication:active'
+            @emit 'replication:active'
+          .on 'denied', =>
+            debug 'replication:denied'
+            @emit 'replication:denied'
+          .on 'complete', =>
+            debug 'replication:complete'
+            @emit 'replication:complete'
+          .on 'error', (error) =>
+            debug 'replication:error', error
+            @emit 'replication:error', error
 
 Return db name (it is up to the application to do a first run, then monitor changes)
 
@@ -296,6 +313,7 @@ Set Voicemail Security
         @json ok:true
 
       @on 'user-voicemail', seem (voicemail_db) ->
+        @load_user?()
         return unless @session.couchdb_token
         yield set_security voicemail_db, @cfg.data.url
 
