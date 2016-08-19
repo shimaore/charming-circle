@@ -18,14 +18,14 @@
 
     describe 'Loading', ->
       it 'filter-provisioning', ->
-        f = require '../filter-provisioning.js'
+        f = require '../provisioning.js'
         f.should.be.a 'function'
       it 'validate-user-doc', ->
         f = require '../validate-user-doc.js'
         f.should.be.a 'function'
 
     describe 'filter-provisioning', ->
-        f = require '../filter-provisioning'
+        f = require '../provisioning'
 
         req = query: roles: JSON.stringify ['number:0123456@example.com','bear:large']
         f(_id:'number:0123456@example.com',req).should.be.true
