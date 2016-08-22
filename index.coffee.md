@@ -275,41 +275,39 @@ Replication
 
 Cancel the replication and close the database after a while.
 
-        cancel = =>
-          rep.cancel()
-          rep = null
-          debug 'replication:canceled'
-          @emit 'replication:canceled'
+          cancel = =>
+            rep.cancel()
+            rep = null
+            debug 'replication:canceled'
+            @emit 'replication:canceled', @session.database
 
-        setTimeout cancel, @cfg.replication_timeout ? 30*minutes
+          setTimeout cancel, @cfg.replication_timeout ? 30*minutes
 
-        rep
-          .on 'paused', =>
-            debug 'replication:paused'
-            @emit 'replication:paused'
-          .on 'active', =>
-            debug 'replication:active'
-            @emit 'replication:active'
-          .on 'denied', =>
-            debug 'replication:denied'
-            @emit 'replication:denied'
-          .on 'complete', =>
-            debug 'replication:complete'
-            @emit 'replication:complete'
-          .on 'error', (error) =>
-            debug 'replication:error', error
-            @emit 'replication:error'
-            cancel()
-            start()
+          rep
+            .on 'paused', =>
+              debug 'replication:paused'
+              @emit 'replication:paused', @session.database
+            .on 'active', =>
+              debug 'replication:active'
+              @emit 'replication:active', @session.database
+            .on 'denied', =>
+              debug 'replication:denied'
+              @emit 'replication:denied', @session.database
+            .on 'complete', =>
+              debug 'replication:complete'
+              @emit 'replication:complete', @session.database
+              @emit 'user-provisioning:content-ready', @session.database
+            .on 'error', (error) =>
+              debug 'replication:error', error
+              @emit 'replication:error', @session.database
+              cancel()
+              start()
 
         start()
 
 Return db name (it is up to the application to do a first run, then monitor changes)
 
         @ack @session.database
-        rep.on 'complete', =>
-          @emit 'user-provisioning:content-ready', @session.database
-
         @emit 'user-provisioning:database-ready', @session.database
         return
 
