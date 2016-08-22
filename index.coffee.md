@@ -55,6 +55,11 @@ The design document for the user's provisioning database.
         require('views/lib/main').validate_user_doc
       '''
 
+      filters:
+        provisioning: fun '''
+          require('views/lib/main').provisioning
+        '''
+
 The design document for the shared provisioning database.
 
     src_ddoc =
@@ -248,7 +253,7 @@ Replication
 
         rep = prov.sync url,
 
-- Force replication from provisioning (continuous, create-db)
+- Force replication from provisioning (continuous)
 
           pull:
             live: true
@@ -258,7 +263,9 @@ Replication
 
           push:
             live: true
-            doc_ids: doc_ids
+            filter: "#{id}/provisioning"
+            query_params:
+              roles: JSON.stringify roles
 
 Cancel the replication and close the database after a while.
 

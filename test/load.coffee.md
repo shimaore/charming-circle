@@ -19,7 +19,7 @@
     describe 'Loading', ->
       it 'provisioning', ->
         f = require '../provisioning.js'
-        f.should.be.a 'object'
+        f.should.be.a 'function'
         f.should.have.property 'filter'
         f.should.have.property 'map'
       it 'validate-user-doc', ->
@@ -37,6 +37,17 @@
 
         req = ['number_domain:example.com']
         filter(_id:'number:0123456@example.com',req).should.be.true
+
+    describe 'filter-provisioning (as query)', ->
+        f = require '../provisioning'
+
+        req = query: roles: JSON.stringify ['number:0123456@example.com','bear:large']
+        f(_id:'number:0123456@example.com',req).should.be.true
+        f(_id:'endpoint:0123456@example.com',req).should.be.false
+        f(_id:'bear:large',req).should.be.false
+
+        req = query: roles: JSON.stringify ['number_domain:example.com']
+        f(_id:'number:0123456@example.com',req).should.be.true
 
     describe 'validate-user-doc', ->
 

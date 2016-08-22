@@ -1,3 +1,7 @@
+    module.exports = (doc, {query:{roles}}) ->
+      roles = JSON.parse roles
+      filter doc, roles
+
     replicated_ids = require './lib/replicated_ids'
 
     module.exports.filter = filter = (doc,roles) ->
