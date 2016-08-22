@@ -256,7 +256,7 @@ Replication
 
         rep = null
 
-        start = ->
+        start = =>
           rep = prov.sync url,
 
 - Force replication from provisioning (continuous)
