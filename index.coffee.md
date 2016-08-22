@@ -254,27 +254,31 @@ Replication
 
         debug 'user-provisioning: going to replicate', doc_ids
 
-        rep = prov.sync url,
+        rep = null
+
+        start = ->
+          rep = prov.sync url,
 
 - Force replication from provisioning (continuous)
 
-          push:
-            live: true
-            doc_ids: doc_ids
+            push:
+              live: true
+              doc_ids: doc_ids
 
 - Force replication back to provisioning (continuous)
 
-          pull:
-            live: true
-            filter: "#{id}/provisioning"
-            query_params:
-              roles: JSON.stringify roles
+            pull:
+              live: true
+              filter: "#{id}/provisioning"
+              query_params:
+                roles: JSON.stringify roles
 
 Cancel the replication and close the database after a while.
 
         cancel = =>
           rep.cancel()
           rep = null
+          debug 'replication:canceled'
           @emit 'replication:canceled'
 
         setTimeout cancel, @cfg.replication_timeout ? 30*minutes
@@ -295,6 +299,10 @@ Cancel the replication and close the database after a while.
           .on 'error', (error) =>
             debug 'replication:error', error
             @emit 'replication:error'
+            cancel()
+            start()
+
+        start()
 
 Return db name (it is up to the application to do a first run, then monitor changes)
 
