@@ -11,7 +11,8 @@ Allow clients access to (some) provisioning features
 
     set_security = require './set-security'
 
-    @name = (require './package').name
+    pkg = require './package'
+    @name = pkg.name
     debug = (require 'debug') @name
 
     seconds = 1000
@@ -46,6 +47,7 @@ The design document for the user's provisioning database.
     ddoc =
       _id: "_design/#{id}"
       language: 'javascript'
+      version: pkg.version
 
       views:
         lib:
@@ -65,6 +67,7 @@ The design document for the shared provisioning database.
     src_ddoc =
       _id: "_design/#{id}"
       language: 'javascript'
+      version: pkg.version
 
       views:
         lib:
