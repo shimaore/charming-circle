@@ -262,13 +262,11 @@ Replication
 - Force replication from provisioning (continuous)
 
             push:
-              live: true
               doc_ids: doc_ids
 
 - Force replication back to provisioning (continuous)
 
             pull:
-              live: true
               filter: "#{id}/provisioning"
               query_params:
                 roles: JSON.stringify roles
@@ -300,8 +298,6 @@ Cancel the replication and close the database after a while.
             .on 'error', (error) =>
               debug 'replication:error', error
               @emit 'replication:error', @session.database
-              cancel()
-              setTimeout start, 20*seconds
 
         start()
 
