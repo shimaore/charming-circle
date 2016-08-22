@@ -301,7 +301,7 @@ Cancel the replication and close the database after a while.
               debug 'replication:error', error
               @emit 'replication:error', @session.database
               cancel()
-              start()
+              setTimeout start, 20*seconds
 
         start()
 
