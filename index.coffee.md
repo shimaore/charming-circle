@@ -294,7 +294,7 @@ Cancel the replication and close the database after a while.
             @emit 'replication:complete'
           .on 'error', (error) =>
             debug 'replication:error', error
-            @emit 'replication:error', error
+            @emit 'replication:error'
 
 Return db name (it is up to the application to do a first run, then monitor changes)
 
