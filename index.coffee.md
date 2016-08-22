@@ -258,13 +258,13 @@ Replication
 
 - Force replication from provisioning (continuous)
 
-          pull:
+          push:
             live: true
             doc_ids: doc_ids
 
 - Force replication back to provisioning (continuous)
 
-          push:
+          pull:
             live: true
             filter: "#{id}/provisioning"
             query_params:
