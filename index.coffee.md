@@ -11,8 +11,6 @@ Allow clients access to (some) provisioning features
 
     set_security = require './set-security'
 
-    load_user = (require 'spicy-action-user').middleware
-
     pkg = require './package'
     @name = pkg.name
     debug = (require 'debug') @name
@@ -80,6 +78,7 @@ The design document for the shared provisioning database.
           '''
 
     @include = ->
+      load_user = @wrap (require 'spicy-action-user').middleware
 
 Put source design document in master.
 
