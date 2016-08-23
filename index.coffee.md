@@ -11,6 +11,8 @@ Allow clients access to (some) provisioning features
 
     set_security = require './set-security'
 
+    load_user = (require 'spicy-action-user').middleware
+
     pkg = require './package'
     @name = pkg.name
     debug = (require 'debug') @name
@@ -201,11 +203,7 @@ See `spicy-action-user` for `@save_user`.
         yield @save_user?()
         "#{ @cfg.data.url }/#{@session.database}"
 
-      @on 'user-provisioning', seem ->
-        @load_user?()
-          .catch (error) ->
-            debug "user-provisioning: load_user failed: #{error}"
-        debug 'user-provisioning', @session
+      @on 'user-provisioning', load_user, seem ->
         return unless @session.couchdb_token
         user = @session.couchdb_username
 
@@ -324,8 +322,7 @@ Set Voicemail Security
           yield set_security voicemail_db, @cfg.data.url
         @json ok:true
 
-      @on 'user-voicemail', seem (voicemail_db) ->
-        @load_user?()
+      @on 'user-voicemail', load_user, seem (voicemail_db) ->
         return unless @session.couchdb_token
         yield set_security voicemail_db, @cfg.data.url
 
