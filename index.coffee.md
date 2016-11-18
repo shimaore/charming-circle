@@ -198,8 +198,9 @@ See `spicy-action-user` for `@save_user`.
 
       @helper user_db: seem ->
         debug 'user_db'
-        @session.database ?= "u#{uuid.v4()}"
-        yield @save_user?()
+        unless @session.database?
+          @session.database = "u#{uuid.v4()}"
+          yield @save_user?()
         "#{ @cfg.data.url }/#{@session.database}"
 
       @on 'user-provisioning', load_user, seem ->
