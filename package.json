@@ -13,8 +13,8 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "debug": "^2.3.3",
-    "pouchdb": "^6.0.7",
-    "shimaore-pouchdb": "^6.1.0-prerelease",
+    "pouchdb": "^6.1.0",
+    "shimaore-pouchdb": "^6.1.0",
     "spicy-action-user": "^2.1.4",
     "superagent": "^3.2.1",
     "superagent-as-promised": "^4.0.0",
