@@ -236,7 +236,11 @@ Set security document on user DB
 Close
 -----
 
-        yield db.close()
+        yield db
+          .close()
+          .catch (error) ->
+            debug "close user_db: #{error.stack ? error}"
+            null
         db = null
 
 Replication
