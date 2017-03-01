@@ -19,12 +19,29 @@ Allow clients access to (some) provisioning features
     seconds = 1000
     minutes = 60*seconds
 
-    update = seem (db,doc) ->
-      {_rev} = yield db
-        .get doc._id
-        .catch -> {}
-      doc._rev = _rev
-      db.put doc
+    update_version = seem (db,ddoc) ->
+      until version is ddoc.version
+
+        {version,_rev} = yield db
+          .get ddoc._id
+          .catch -> {}
+
+        unless version is ddoc.version
+          debug 'update_version: updating design document', ddoc._id, ddoc.version
+          if _rev?
+            ddoc._rev = _rev
+
+Introduce a delay in case the user is trying this operation multiple times concurrently.
+
+          yield sleep 43+Math.random()*319
+
+          yield db
+            .put ddoc
+            .catch -> null
+
+    sleep = (timeout) ->
+      new Promise (resolve) ->
+        setTimeout resolve, timeout
 
     pkg = require './package'
 
@@ -87,7 +104,7 @@ Put source design document in master.
 
       prov_url = "#{ @cfg.data.url }/provisioning"
       prov = new PouchDB prov_url
-      update prov, src_ddoc
+      update_version prov, src_ddoc
 
 Provisioning without User Database
 ==================================
@@ -223,7 +240,7 @@ Set `validate_doc_update`
 
 It must enforce the presence of "updated_by" in all docs and the username must match the userCtx name.
 
-        yield update db, ddoc
+        yield update_version db, ddoc
 
 Set security document on user DB
 --------------------------------
@@ -231,11 +248,13 @@ Set security document on user DB
 - The user is a reader/writer.
 - The user is not an admin on their own DB.
 
+        debug 'user_db: updating security'
         yield set_security @session.database, @cfg.data.url, [user]
 
 Close
 -----
 
+        debug 'user_db: close'
         yield db
           .close()
           .catch (error) ->
@@ -245,6 +264,8 @@ Close
 
 Replication
 -----------
+
+        debug 'user_db: retrieving document IDs'
 
         roles = @session.couchdb_roles ? []
 
@@ -260,6 +281,7 @@ Replication
         rep = null
 
         start = =>
+          debug 'user_db: start replication'
           rep = prov.sync url,
 
 - Force replication from provisioning (continuous)
@@ -277,6 +299,7 @@ Replication
 Cancel the replication and close the database after a while.
 
           cancel = =>
+            debug 'user_db: cancel replication'
             rep.cancel()
             rep = null
             debug 'replication:canceled'
