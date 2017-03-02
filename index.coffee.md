@@ -1,7 +1,7 @@
 Allow clients access to (some) provisioning features
 ----------------------------------------------------
 
-    request = (require 'superagent-as-promised') require 'superagent'
+    request = require 'superagent'
     seem = require 'seem'
     PouchDB = require 'pouchdb'
     ProperPouchDB = require 'shimaore-pouchdb'
@@ -19,29 +19,8 @@ Allow clients access to (some) provisioning features
     seconds = 1000
     minutes = 60*seconds
 
-    update_version = seem (db,ddoc) ->
-      until version is ddoc.version
-
-        {version,_rev} = yield db
-          .get ddoc._id
-          .catch -> {}
-
-        unless version is ddoc.version
-          debug 'update_version: updating design document', ddoc._id, ddoc.version
-          if _rev?
-            ddoc._rev = _rev
-
-Introduce a delay in case the user is trying this operation multiple times concurrently.
-
-          yield sleep 43+Math.random()*319
-
-          yield db
-            .put ddoc
-            .catch -> null
-
-    sleep = (timeout) ->
-      new Promise (resolve) ->
-        setTimeout resolve, timeout
+    update_version = require 'wandering-country/update-version'
+    sleep = require 'wandering-country/sleep'
 
     pkg = require './package'
 
@@ -94,6 +73,8 @@ The design document for the shared provisioning database.
           map: fun '''
             require('views/lib/main').provisioning.map
           '''
+
+    wandering = require 'wandering-country/design'
 
     @include = ->
       load_user = @wrap (require 'spicy-action-user').middleware
@@ -241,6 +222,11 @@ Set `validate_doc_update`
 It must enforce the presence of "updated_by" in all docs and the username must match the userCtx name.
 
         yield update_version db, ddoc
+
+Set views for wandering-country
+-------------------------------
+
+        yield update_version db, wandering.ddoc
 
 Set security document on user DB
 --------------------------------
