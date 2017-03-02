@@ -19,8 +19,8 @@ Allow clients access to (some) provisioning features
     seconds = 1000
     minutes = 60*seconds
 
-    update_version = require 'wandering-country/update-version'
-    sleep = require 'wandering-country/sleep'
+    update_version = require 'marked-summer/update-version'
+    sleep = require 'marked-summer/sleep'
 
     pkg = require './package'
 
@@ -73,8 +73,6 @@ The design document for the shared provisioning database.
           map: fun '''
             require('views/lib/main').provisioning.map
           '''
-
-    wandering = require 'wandering-country/design'
 
     @include = ->
       load_user = @wrap (require 'spicy-action-user').middleware
@@ -195,6 +193,8 @@ Provisioning User Database
 
 See `spicy-action-user` for `@save_user`.
 
+      WanderingCountryWithCCNQ = @WanderingCountryWithCCNQ
+
       @helper user_db: seem ->
         debug 'user_db'
         unless @session.database?
@@ -226,7 +226,9 @@ It must enforce the presence of "updated_by" in all docs and the username must m
 Set views for wandering-country
 -------------------------------
 
-        yield update_version db, wandering.ddoc
+        if WanderingCountryWithCCNQ?
+          w = new WanderingCountryWithCCNQ db
+          yield w.push_couchapp()
 
 Set security document on user DB
 --------------------------------
