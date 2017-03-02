@@ -13,7 +13,7 @@
   "dependencies": {
     "body-parser": "^1.17.0",
     "debug": "^2.6.1",
-    "marked-summer": "^1.0.0",
+    "marked-summer": "^1.0.1",
     "pouchdb": "^6.1.1",
     "shimaore-pouchdb": "^6.1.1",
     "spicy-action-user": "^2.4.6",
