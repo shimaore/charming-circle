@@ -74,7 +74,7 @@ The design document for the shared provisioning database.
             require('views/lib/main').provisioning.map
           '''
 
-    @include = ->
+    @include = (plugins) ->
       load_user = @wrap (require 'spicy-action-user').middleware
 
 Put source design document in master.
@@ -193,8 +193,6 @@ Provisioning User Database
 
 See `spicy-action-user` for `@save_user`.
 
-      WanderingCountryWithCCNQ = @WanderingCountryWithCCNQ
-
       @helper user_db: seem ->
         debug 'user_db'
         unless @session.database?
@@ -223,12 +221,9 @@ It must enforce the presence of "updated_by" in all docs and the username must m
 
         yield update_version db, ddoc
 
-Set views for wandering-country
--------------------------------
-
-        if WanderingCountryWithCCNQ?
-          w = new WanderingCountryWithCCNQ db
-          yield w.push_couchapp()
+        if plugins?
+          for plugin in plugins
+            yield plugin.call this, db
 
 Set security document on user DB
 --------------------------------
