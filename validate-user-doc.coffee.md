@@ -38,7 +38,8 @@
           language: language
           local_number: (v) -> may "number:#{v}"
 
-        endpoint: {}
+        endpoint:
+          display_name: optional (v) -> typeof v is 'string'
 
         number_domain:
           fifos: array
