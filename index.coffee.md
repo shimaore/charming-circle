@@ -201,7 +201,7 @@ See `spicy-action-user` for `@save_user`.
         "#{ @cfg.data.url }/#{@session.database}"
 
       @on 'user-provisioning', load_user, seem ->
-        return unless @session.couchdb_token
+        return unless @session?.couchdb_token?
         user = @session.couchdb_username
 
 Create user DB
@@ -329,12 +329,12 @@ Set Voicemail Security
 
       @get '/user-voicemail/:voicemail_db', seem ->
         voicemail_db = @params.voicemail_db
-        if @session.couchdb_token
+        if @session?.couchdb_token?
           yield set_security voicemail_db, @cfg.data.url
         @json ok:true
 
       @on 'user-voicemail', load_user, seem (voicemail_db) ->
-        return unless @session.couchdb_token
+        return unless @session?.couchdb_token?
         yield set_security voicemail_db, @cfg.data.url
 
 Return the db name
