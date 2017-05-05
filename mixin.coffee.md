@@ -6,6 +6,8 @@ Obtain access to the user's database.
 
     exports.include = ({ev}) ->
 
+      timer = null
+
       @on 'ready', ->
         debug 'received ready ← server'
 
@@ -13,7 +15,8 @@ Obtain access to the user's database.
           debug 'emit user-provisioning → server'
           @emit 'user-provisioning'
 
-        setInterval user_prov, 30*1000
+        clearInterval timer if timer?
+        timer = setInterval user_prov, 30*1000
         user_prov()
 
       ev.on 'user-provisioning', =>
