@@ -1,6 +1,6 @@
 {
   "name": "charming-circle",
-  "version": "3.5.2",
+  "version": "4.0.0",
   "description": "Per-user database",
   "main": "index.js",
   "scripts": {
