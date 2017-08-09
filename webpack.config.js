@@ -7,9 +7,7 @@ module.exports = {
   },
   output: {
     // Use relative path (to the module)
-    // path: path.join(__dirname,'public')
-    // Use relative path (to the current working directory)
-    path: '.'
+    path: path.join(__dirname,'.')
   , filename: '[name].bundle.js'
   , library: '[name]'
   , libraryTarget: 'umd'

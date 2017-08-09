@@ -11,24 +11,24 @@
   "author": "Stéphane Alnet <stephane@shimaore.net> (http://stephane.shimaore.net/)",
   "license": "Unlicense",
   "dependencies": {
-    "body-parser": "^1.17.0",
-    "debug": "^2.6.1",
-    "marked-summer": "^1.0.1",
+    "body-parser": "^1.17.2",
+    "debug": "^3.0.0",
+    "marked-summer": "^1.0.3",
     "pouchdb": "^6.3.4",
-    "spicy-action-user": "^2.4.6",
-    "superagent": "^3.5.0",
-    "uuid": "^3.0.1",
+    "spicy-action-user": "^3.0.2",
+    "superagent": "^3.5.2",
+    "uuid": "^3.1.0",
     "windy-moon": "^4.0.4"
   },
   "peerDependencies": {
-    "zappajs": "^6.3.0"
+    "zappajs": "^6.4.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "coffee-script": "^1.12.4",
-    "mocha": "^3.2.0",
-    "webpack": "^1.14.0",
-    "zappajs": "^6.2.0"
+    "chai": "^4.1.1",
+    "coffee-script": "^1.12.7",
+    "mocha": "^3.5.0",
+    "webpack": "^3.5.2",
+    "zappajs": "^6.4.1"
   },
   "repository": {
     "type": "git",
