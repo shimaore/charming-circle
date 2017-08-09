@@ -4,7 +4,6 @@ Allow clients access to (some) provisioning features
     request = require 'superagent'
     seem = require 'seem'
     PouchDB = require 'pouchdb'
-    ProperPouchDB = require 'shimaore-pouchdb'
     jsonBody = (require 'body-parser').json {}
     fs = require 'fs'
     path = require 'path'
@@ -211,7 +210,7 @@ Create user DB
 
         debug 'user_db', url
 
-        db = new ProperPouchDB url
+        db = new PouchDB url
         yield db.info()
 
 Set `validate_doc_update`
