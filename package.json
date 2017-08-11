@@ -28,7 +28,7 @@
     "chai": "^4.1.1",
     "coffee-script": "^1.12.7",
     "mocha": "^3.5.0",
-    "webpack": "^3.5.2",
+    "webpack": "^3.5.3",
     "zappajs": "^6.4.1"
   },
   "repository": {
