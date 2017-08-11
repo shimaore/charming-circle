@@ -14,8 +14,9 @@
     "body-parser": "^1.17.2",
     "debug": "^3.0.0",
     "marked-summer": "^1.0.3",
-    "pouchdb": "^6.3.4",
-    "spicy-action-user": "^3.0.2",
+    "pouchdb-adapter-http": "^6.3.4",
+    "pouchdb-core": "^6.3.4",
+    "spicy-action-user": "^3.1.1",
     "superagent": "^3.5.2",
     "uuid": "^3.1.0",
     "windy-moon": "^4.0.4"
