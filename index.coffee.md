@@ -2,7 +2,7 @@ Allow clients access to (some) provisioning features
 ----------------------------------------------------
 
     seem = require 'seem'
-    PouchDB = require 'pouchdb-core'
+    PouchDB = require 'shimaore-pouchdb-core'
       .plugin require 'pouchdb-adapter-http'
     jsonBody = (require 'body-parser').json {}
     fs = require 'fs'
