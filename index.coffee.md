@@ -1,7 +1,6 @@
 Allow clients access to (some) provisioning features
 ----------------------------------------------------
 
-    request = require 'superagent'
     seem = require 'seem'
     PouchDB = require 'pouchdb-core'
       .plugin require 'pouchdb-adapter-http'
